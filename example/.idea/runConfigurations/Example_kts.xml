@@ -1,0 +1,9 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Example.kts" type="KotlinStandaloneScriptRunConfigurationType">
+    <option name="filePath" value="$PROJECT_DIR$/Example.kts" />
+    <shortenClasspath name="NONE" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

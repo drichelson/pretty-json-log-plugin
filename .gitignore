@@ -1,5 +1,6 @@
 .gradle
 .idea
+!example/.idea
 .intellijPlatform
 .qodana
 build

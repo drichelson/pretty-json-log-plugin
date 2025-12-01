@@ -128,6 +128,49 @@ kover {
     }
 }
 
+// Task to configure JDK in the sandbox IDE so Kotlin scripts can run
+val configureSandboxJdk by tasks.registering {
+    val sandboxDir = layout.buildDirectory.dir("idea-sandbox/config/options")
+    val jdkTableFile = sandboxDir.map { it.file("jdk.table.xml") }
+    val javaHome = providers.systemProperty("java.home")
+
+    inputs.property("javaHome", javaHome)
+    outputs.file(jdkTableFile)
+
+    doLast {
+        val javaHomePath = javaHome.get()
+        val jdkDir = sandboxDir.get().asFile
+        jdkDir.mkdirs()
+
+        jdkTableFile.get().asFile.writeText("""
+            <application>
+              <component name="ProjectJdkTable">
+                <jdk version="2">
+                  <name value="21" />
+                  <type value="JavaSDK" />
+                  <version value="java version 21" />
+                  <homePath value="$javaHomePath" />
+                  <roots>
+                    <annotationsPath>
+                      <root type="composite" />
+                    </annotationsPath>
+                    <classPath>
+                      <root type="composite" />
+                    </classPath>
+                    <javadocPath>
+                      <root type="composite" />
+                    </javadocPath>
+                    <sourcePath>
+                      <root type="composite" />
+                    </sourcePath>
+                  </roots>
+                </jdk>
+              </component>
+            </application>
+        """.trimIndent())
+    }
+}
+
 tasks {
     wrapper {
         gradleVersion = providers.gradleProperty("gradleVersion").get()
@@ -135,6 +178,12 @@ tasks {
 
     publishPlugin {
         dependsOn(patchChangelog)
+    }
+
+    runIde {
+        // Open the example project in the sandbox IDE for quick testing
+        args = listOf(layout.projectDirectory.dir("example").asFile.absolutePath)
+        dependsOn(configureSandboxJdk)
     }
 }
 
