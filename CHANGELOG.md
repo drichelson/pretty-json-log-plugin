@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+Updated deps
+
 ## [0.5.0] - 2024-10-17
 
 ### Added
